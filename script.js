@@ -1,58 +1,141 @@
-function OpeningCeremony(score,Callback){
-    
-    setTimeout(() =>{
-        console.log("Let the games begin");
-       Race100M(score,Callback);
-      },1000);
+// 
+let scores={
+    red:0,
+    blue:0,
+    green:0,
+    yellow:0
+};
+function OpeningCeremony(){
+    setTimeout(()=>{console.log("Let the games begin")},1000);
+    setTimeout(()=>{Race100M(scores)},3000);
 }
+function Race100M(scores){
+    var event="Race100M"
+    console.log("Event : "+event)
+    console.log("")
+    console.log("previous score :")
+    let colors=Object.keys(scores);
+    colors.forEach((c)=>{
+        console.log(c+" "+scores[c])
+    })
+    console.log("")
 
-function Race100M(score, Callback){
-    setTimeout(function (){
-        const colors = Object.keys(score);
-        const time = {};
-        colors.forEach(function (color){
-            time[color] = Math.floor(Math.random()*6)+10;
-        })
+    colors.forEach((c)=>{
+        scores[c]=getRndInteger(10,15);
+    })
+    var color1;
+    var min1=16;
+    var color2;
+    var arr=[];
+    colors.forEach((c)=>{
+        if(min1>scores[c]){
+            min1=scores[c];
+            color1=c;
+        }
+        arr.push(scores[c]);
+    })
+    arr.sort((a,b)=>{return a-b})
+    colors.forEach((c)=>{
+        if(scores[c]==arr[1]){
+            color2=c;
+        }
+    })
+    scores[color1]=min1+50;
+    scores[color2]=arr[1]+25;
+    console.log("updated scores :")
+    colors.forEach((c)=>{
+        console.log(c+" "+scores[c])
+    })
+    console.log("")
 
-        const sortTime = object.entries(time).sort((a, b)=>a[1]-b[1]);
-        //console.log(sortTime);
-        score[sortTime[0][0]] += 50;
-        score[sortTime[1][0]] += 25;
-        console.log("Race 100M Results: ")
-        console.log(score);
-        LongJump (score);
 
+
+    let list=Object.keys(scores).sort((a,b)=>{return scores[a]-scores[b]});
+    console.log(list[3]+" won the event "+event);
+    console.log("")
+
+    setTimeout(()=>{LongJump(scores)},2000);
+}
+function LongJump(scores){
+    var event="LongJump"
+    console.log("Event : "+event)
+    console.log("")
+
+    console.log("previous scores :")
+    var colors=Object.keys(scores)
+    colors.forEach((c)=>{
+        console.log(c+" "+scores[c])
+    })
+    console.log("")
+
+    var arr=["red","blue","green","yellow"];
+    var rand=getRndInteger(0,3);
+    var p=scores[arr[rand]];
+    p+=150;
+    scores[arr[rand]]=p;
+    console.log("updated score :")
+    colors.forEach((c)=>{
+        console.log(c+" "+scores[c])
+    })   
+    console.log("")
+
+    let list=Object.keys(scores).sort((a,b)=>{return scores[a]-scores[b]});
+    console.log(list[3]+" won the event "+event);
+    console.log("")
+ 
+    setTimeout(()=>{HighJump(scores)},0)
+}
+function HighJump(scores){
+    var event="High Jump function"
+    console.log("Event : "+event)
+    console.log("")
+
+    console.log("Long Jump Results: ")
+    let colors=Object.keys(scores);
+    colors.forEach((c)=>{
+        console.log(c+" "+scores[c])
+    }) 
+    console.log("")
+
+    var color=prompt("Enter Color");
+    flag=0;
+    colors.forEach((c)=>{
+        if(c==color){
+            flag=1;
+            var p=scores[c]
+            p+=100;
+            scores[c]=p;
+        }
+    })
+    if(flag==0){
+        console.log("Event was Cancelled");
+    }
+    console.log("High Jump Result: ")
+    colors.forEach((c)=>{
+        console.log(c+" "+scores[c])
+    });
+    console.log("")
+
+        let list=Object.keys(scores).sort((a,b)=>{return scores[a]-scores[b]});
+    console.log(list[3]+" results "+event);
+    console.log("")
+
+    setTimeout(()=>{AwardCeremony(scores)},0)
+}
+function AwardCeremony(scores){
+    var event="Award Ceremony"
+    console.log("Event :"+event)
+    let list=Object.keys(scores).sort((a,b)=>
+    {return scores[b]-scores[a]});
+    let colors=Object.keys(list);
+    var arr=["first","second","third","fourth"]
+    var i=0;
+    colors.forEach((c)=>{
+        console.log(`${list[c]} came ${arr[i++]} with ${scores[list[c]]} points`)
     })
 }
-function LongJump(score){
-    setTimeout(function () {
-          console.log("Long Jump Results: ");
-          const colors = Object.keys(score);
-          const clickColor = colors[Math.floor(Math.random()*4)];
-          score[clickColor] += 150;
-          console.log(score);
-          HighJump(score);
-    },2000);
-}
-function HighJump(score){
-    const prompt = require("prompt-sync")({sigint:true});
-    console.log("High jump results: ");
-    const inputColor = prompt("What colour secured the highest jump?");
-    if(inputColor==='red' || inputColor==='blue' || inputColor==='green' || inputColor==='yellow'){
-        score[inputColor] += 100;
-        console.log(score)
-    }else{
-        console.log("Event was cancelled") ;
-    }
-    AwardCeremony(score);
-}
-function AwardCeremony(score){
-    console.log("Award ceremony start: ");
-    const sortScore = object.entries(score).sort((a, b) => b[1] - a[1]);
-    console.log(`${sortScore[0][0]} came first with ${sortScore[0][1]} points`);
-    console.log(`${sortScore[1][0]} came second with ${sortScore[1][1]} points`);
-    console.log(`${sortScore[2][0]} came third with ${sortScore[2][1]} points`);
-}
 
-const initValue = {red:0,blue:0,green:0,yellow:0}
-OpeningCeremony(initValue, Race100M)
+function getRndInteger(num1, num2) {
+    return Math.floor(Math.random() * (num1 - num2) ) + num2;
+  }
+console.log(OpeningCeremony())
